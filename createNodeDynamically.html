@@ -7,24 +7,98 @@
     <title>SVG</title>
   </head>
   <body>
-    <svg id="mySVG" width="600" height="600"></svg>
+    <svg id="SVG_1" width="600" height="600"></svg>
+    <svg id="SVG_2" width="600" height="600"></svg>
     <script>
-      function createCircle() {
+      function createCircle(x, y, r) {
         var myCircle = document.createElementNS(
           "http://www.w3.org/2000/svg",
           "circle"
         ); //to create a circle. for rectangle use "rectangle"
-        myCircle.setAttributeNS(null, "id", "mycircle");
-        myCircle.setAttributeNS(null, "cx", 100);
-        myCircle.setAttributeNS(null, "cy", 100);
-        myCircle.setAttributeNS(null, "r", 50);
-        myCircle.setAttributeNS(null, "fill", "black");
-        myCircle.setAttributeNS(null, "stroke", "none");
+        // myCircle.setAttributeNS(null, "id", "mycircle");
+        myCircle.setAttributeNS(null, "cx", x);
+        myCircle.setAttributeNS(null, "cy", y);
+        myCircle.setAttributeNS(null, "r", r);
+        myCircle.setAttributeNS(null, "fill", "none");
+        myCircle.setAttributeNS(null, "stroke", "black");
 
-        document.getElementById("mySVG").appendChild(myCircle);
+        document.getElementById("SVG_1").appendChild(myCircle);
       }
 
-      createCircle();
+      createCircle(300, 300, 50);
+      createCircle(300, 300, 100);
+      createCircle(300, 300, 150);
+      createCircle(300, 300, 200);
+      createCircle(300, 300, 250);
+
+      function createLine(x, y, len, dir) {
+        var myLine = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
+
+        let x2 = 0;
+        let y2 = 0;
+
+        if (dir === "left") {
+          x2 = x - len;
+          y2 = y;
+        } else if (dir === "down") {
+          x2 = x;
+          y2 = y + len;
+        } else if (dir === "right") {
+          x2 = x + len;
+          y2 = y;
+        } else if (dir === "up") {
+          x2 = x;
+          y2 = y - len;
+        }
+        myLine.setAttributeNS(null, "x1", x);
+        myLine.setAttributeNS(null, "y1", y);
+        myLine.setAttributeNS(null, "x2", x2);
+        myLine.setAttributeNS(null, "y2", y2);
+        myLine.setAttributeNS(null, "stroke", "black");
+
+        document.getElementById("SVG_2").appendChild(myLine);
+
+        return [x2, y2];
+      }
+
+      //   let x = 0,
+      //     y = 100;
+      //   [x, y] = createLine(x, y, 400, "right");
+      //   [x, y] = createLine(x, y, 400, "down");
+      //   [x, y] = createLine(x, y, 300, "left");
+      //   [x, y] = createLine(x, y, 300, "up");
+      //   [x, y] = createLine(x, y, 200, "right");
+      //   [x, y] = createLine(x, y, 200, "down");
+
+      function drawSpiral() {
+        let x = 300,
+          y = 300; //center and starting point
+        let dir = "left";
+        let len = 10;
+        let incBY = len;
+        let count = 0;
+        let getDir = {
+          left: "down",
+          down: "right",
+          right: "up",
+          up: "left",
+        };
+
+        for (let i = 0; i < 120; i++) {
+          [x, y] = createLine(x, y, len, dir); // [x,y] are previous line x2,y2
+          count++;
+          dir = getDir[dir];
+          if (count >= 2) {
+            count = 0;
+            len += incBY;
+          }
+        }
+      }
+
+      drawSpiral();
     </script>
   </body>
 </html>
